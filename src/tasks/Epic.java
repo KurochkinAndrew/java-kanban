@@ -1,3 +1,5 @@
+package tasks;
+
 import java.util.HashMap;
 
 public class Epic extends Task {
@@ -9,11 +11,11 @@ public class Epic extends Task {
         super(name, description);
     }
 
-    void addSubtask(int subtaskID, Object subtask) {
+    public void addSubtask(int subtaskID, Object subtask) {
         subtasks.put(subtaskID, (Subtask) subtask);
     }
 
-    void removeSubtask(int ID) {
+    public void removeSubtask(int ID) {
         subtasks.remove(ID);
     }
 
