@@ -14,15 +14,17 @@ public class Main {
         taskManager.makeNewTask(task1);
         taskManager.makeNewTask(task2);
         taskManager.makeNewTask(epic1);
-        taskManager.makeNewSubtask(subtask1, epic1.ID);
-        taskManager.makeNewSubtask(subtask2, epic1.ID);
+        taskManager.makeNewSubtask(subtask1, epic1.getID());
+        taskManager.makeNewSubtask(subtask2, epic1.getID());
         taskManager.makeNewTask(epic2);
-        taskManager.makeNewSubtask(subtask3, epic2.ID);
+        taskManager.makeNewSubtask(subtask3, epic2.getID());
         System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
         System.out.println(epic1.getStatus());
-        taskManager.removeTaskByID(subtask2.ID);
+        taskManager.removeSubtaskByID(subtask2.getID());
         System.out.println(epic1.getStatus());
-        taskManager.removeTaskByID(task1.ID);
+        taskManager.removeTaskByID(task1.getID());
         System.out.println(taskManager.getAllTasks());
     }
 }
