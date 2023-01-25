@@ -63,27 +63,27 @@ public class TaskManager {
     }
 
     public Task getTaskByID(int ID) {
-        Object result = new Object();
+        Task result = new Task("","");
         if (tasks.containsKey(ID)) {
             result = tasks.get(ID);
         }
-        return (Task) result;
+        return result;
     }
 
     public Epic getEpicByID(int ID) {
-        Object result = new Object();
+        Epic result = new Epic("", "");
         if (epics.containsKey(ID)) {
             result = epics.get(ID);
         }
-        return (Epic) result;
+        return result;
     }
 
     public Subtask getSubtaskByID(int ID) {
-        Object result = new Object();
+        Subtask result = new Subtask("", "", "");
         if (subtasks.containsKey(ID)) {
             result = subtasks.get(ID);
         }
-        return (Subtask) result;
+        return result;
     }
 
     public void makeNewSubtask(Subtask task, int epicID) {
