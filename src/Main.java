@@ -28,6 +28,9 @@ public class Main {
         System.out.println(taskManager.getAllSubtasks());
         System.out.println(epic1.getStatus());
         taskManager.removeSubtaskByID(subtask2.getID());
+        taskManager.removeEpicByID(epic2.getID());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
         System.out.println(epic1.getStatus());
         taskManager.removeTaskByID(task1.getID());
         System.out.println(taskManager.getAllTasks());

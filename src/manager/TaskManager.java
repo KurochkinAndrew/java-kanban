@@ -1,8 +1,6 @@
 package manager;
 
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import tasks.*;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -39,6 +37,7 @@ public class TaskManager {
 
     public void removeAllTasks() {
         tasks.clear();
+        subtasks.clear();
     }
 
     public void removeAllEpics() {
@@ -63,27 +62,15 @@ public class TaskManager {
     }
 
     public Task getTaskByID(int ID) {
-        Task result = new Task("","");
-        if (tasks.containsKey(ID)) {
-            result = tasks.get(ID);
-        }
-        return result;
+        return tasks.get(ID);
     }
 
     public Epic getEpicByID(int ID) {
-        Epic result = new Epic("", "");
-        if (epics.containsKey(ID)) {
-            result = epics.get(ID);
-        }
-        return result;
+        return epics.get(ID);
     }
 
     public Subtask getSubtaskByID(int ID) {
-        Subtask result = new Subtask("", "", "");
-        if (subtasks.containsKey(ID)) {
-            result = subtasks.get(ID);
-        }
-        return result;
+        return subtasks.get(ID);
     }
 
     public void makeNewSubtask(Subtask task, int epicID) {
@@ -125,6 +112,13 @@ public class TaskManager {
 
     public void removeEpicByID(int ID) {
         if (epics.containsKey(ID)) {
+            for (Subtask task : epics.get(ID).getSubtasks().values()) {
+                for (Subtask subtask : subtasks.values()){
+                    if(task.getID() == subtask.getID()){
+                        subtasks.remove(task.getID());
+                    }
+                }
+            }
             epics.remove(ID);
         }
     }
