@@ -1,20 +1,20 @@
-import manager.TaskManager;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import manager.*;
+import tasks.*;
+
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
-        Task task1 = new Task("Помыть посуду", "Нужно помыть посуду до прихода гостей", "NEW");
-        Task task2 = new Task("Погулять с собакой", "Вечерняя прогулка", "NEW");
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        Task task1 = new Task("Помыть посуду", "Нужно помыть посуду до прихода гостей", Status.NEW);
+        Task task2 = new Task("Погулять с собакой", "Вечерняя прогулка", Status.NEW);
         Epic epic1 = new Epic("Починить машину", "Нужно поменять топливный насос");
-        Subtask subtask1 = new Subtask("Купить детали", "Купить топливный насос и болты", "DONE");
+        Subtask subtask1 = new Subtask("Купить детали", "Купить топливный насос и болты",
+                Status.DONE);
         Subtask subtask2 = new Subtask("Установить детали",
-                "Установить топливный насос и болты", "NEW");
+                "Установить топливный насос и болты", Status.NEW);
         Epic epic2 = new Epic("Убраться дома", "Помыть полы");
         Subtask subtask3 = new Subtask("Купить моющее средство", "Сходить в магазин хозтоваров",
-                "NEW");
+                Status.NEW);
 
         taskManager.makeNewTask(task1);
         taskManager.makeNewTask(task2);
@@ -23,16 +23,12 @@ public class Main {
         taskManager.makeNewSubtask(subtask2, epic1.getID());
         taskManager.makeNewTask(epic2);
         taskManager.makeNewSubtask(subtask3, epic2.getID());
-        System.out.println(taskManager.getAllTasks());
-        System.out.println(taskManager.getAllEpics());
-        System.out.println(taskManager.getAllSubtasks());
-        System.out.println(epic1.getStatus());
-        taskManager.removeSubtaskByID(subtask2.getID());
-        taskManager.removeEpicByID(epic2.getID());
-        System.out.println(taskManager.getAllEpics());
-        System.out.println(taskManager.getAllSubtasks());
-        System.out.println(epic1.getStatus());
-        taskManager.removeTaskByID(task1.getID());
-        System.out.println(taskManager.getAllTasks());
+        taskManager.getEpicByID(epic2.getID());
+        for (int i = 0; i<8; i++){
+            taskManager.getTaskByID(task1.getID());
+        }
+        taskManager.getTaskByID(task2.getID());
+        taskManager.getTaskByID(task2.getID());
+        taskManager.getHistory();
     }
 }
