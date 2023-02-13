@@ -1,4 +1,5 @@
 package tasks;
+
 import manager.Status;
 
 public class Task {

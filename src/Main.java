@@ -4,7 +4,7 @@ import tasks.*;
 
 public class Main {
     public static void main(String[] args) {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Помыть посуду", "Нужно помыть посуду до прихода гостей", Status.NEW);
         Task task2 = new Task("Погулять с собакой", "Вечерняя прогулка", Status.NEW);
         Epic epic1 = new Epic("Починить машину", "Нужно поменять топливный насос");
@@ -16,19 +16,19 @@ public class Main {
         Subtask subtask3 = new Subtask("Купить моющее средство", "Сходить в магазин хозтоваров",
                 Status.NEW);
 
-        taskManager.makeNewTask(task1);
-        taskManager.makeNewTask(task2);
-        taskManager.makeNewTask(epic1);
-        taskManager.makeNewSubtask(subtask1, epic1.getID());
-        taskManager.makeNewSubtask(subtask2, epic1.getID());
-        taskManager.makeNewTask(epic2);
-        taskManager.makeNewSubtask(subtask3, epic2.getID());
-        taskManager.getEpicByID(epic2.getID());
+        manager.makeNewTask(task1);
+        manager.makeNewTask(task2);
+        manager.makeNewTask(epic1);
+        manager.makeNewSubtask(subtask1, epic1.getID());
+        manager.makeNewSubtask(subtask2, epic1.getID());
+        manager.makeNewTask(epic2);
+        manager.makeNewSubtask(subtask3, epic2.getID());
+        manager.getEpicByID(epic2.getID());
         for (int i = 0; i<8; i++){
-            taskManager.getTaskByID(task1.getID());
+            manager.getTaskByID(task1.getID());
         }
-        taskManager.getTaskByID(task2.getID());
-        taskManager.getTaskByID(task2.getID());
-        taskManager.getHistory();
+        manager.getTaskByID(task2.getID());
+        manager.getTaskByID(task2.getID());
+        manager.getHistory();
     }
 }
