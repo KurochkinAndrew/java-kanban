@@ -23,8 +23,8 @@ public class Main {
         manager.makeNewSubtask(subtask2, epic1.getID());
         manager.makeNewTask(epic2);
         manager.makeNewSubtask(subtask3, epic2.getID());
-        manager.getEpicByID(epic2.getID());
-        for (int i = 0; i<8; i++){
+        manager.getEpicByID(epic1.getID());
+        for (int i = 0; i < 8; i++) {
             manager.getTaskByID(task1.getID());
         }
         manager.getTaskByID(task2.getID());
