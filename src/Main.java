@@ -1,8 +1,6 @@
 import manager.*;
 import tasks.*;
 
-import java.util.LinkedList;
-
 
 public class Main {
     public static void main(String[] args) {
@@ -25,15 +23,14 @@ public class Main {
         manager.makeNewSubtask(subtask2, epic1.getID());
         manager.makeNewTask(epic2);
         manager.makeNewSubtask(subtask3, epic2.getID());
+
         manager.getTaskByID(task1.getID());
-        manager.getTaskByID(task1.getID());
-        manager.getEpicByID(epic1.getID());
-        manager.getTaskByID(task1.getID());
-        manager.getTaskByID(task2.getID());
-        manager.getSubtaskByID(subtask1.getID());
         manager.getSubtaskByID(subtask2.getID());
-        manager.removeTaskByID(task1.getID());
+        manager.getTaskByID(task1.getID());
+        manager.getTaskByID(task2.getID()); //Вот последний таск
+        manager.removeTaskByID(task2.getID()); //Тут удаляю его и никакой ошибки нет, может я что-то не так понял?
         manager.getHistory();
+
     }
 
 }

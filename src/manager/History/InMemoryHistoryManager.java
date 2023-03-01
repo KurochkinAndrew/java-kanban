@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    CustomLinkedList historyLinkedList = new CustomLinkedList();
+    private CustomLinkedList historyLinkedList = new CustomLinkedList();
 
     @Override
     public void remove(int id) {
@@ -31,7 +31,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         HashMap<Integer, Node> nodes = new HashMap<>();
         private Node head;
         private Node tail;
-        private int size = 0;
 
         public void linkLast(Task element) {
             final Node oldTail = tail;
@@ -40,15 +39,16 @@ public class InMemoryHistoryManager implements HistoryManager {
             nodes.put(newNode.data.getID(), newNode);
             if (oldTail == null) head = newNode;
             else oldTail.next = newNode;
-            size++;
         }
 
         public ArrayList<Task> getTasks() {
-            ArrayList<Task> history = new ArrayList<>();
-            for (Node x = head; x != null; x = x.next) {
-                history.add(x.data);
+            ArrayList<Task> tasks = new ArrayList<>();
+            Node node = head;
+            while (node != null) {
+                tasks.add(node.data);
+                node = node.next;
             }
-            return history;
+            return tasks;
         }
 
         public void removeNode(Node node) {

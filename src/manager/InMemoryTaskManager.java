@@ -167,6 +167,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.get(subtasks.get(ID).getEpicOwnerID()).removeSubtask(ID);
             epics.get(subtasks.get(ID).getEpicOwnerID()).
                     setStatus(calculateStatusOfEpic(subtasks.get(ID).getEpicOwnerID()));
+            historyManager.remove(ID);
             subtasks.remove(ID);
         }
     }
