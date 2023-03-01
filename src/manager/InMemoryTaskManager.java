@@ -1,5 +1,6 @@
 package manager;
 
+import manager.History.HistoryManager;
 import tasks.*;
 
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllTasks() {
         tasks.clear();
+
     }
 
     @Override
@@ -132,20 +134,29 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTaskByID(int ID) {
         if (tasks.containsKey(ID)) {
+            historyManager.remove(ID);
             tasks.remove(ID);
         }
     }
 
     @Override
     public void removeEpicByID(int ID) {
+        ArrayList<Subtask> subtasksNeedToRemove = new ArrayList<>();
         if (epics.containsKey(ID)) {
             for (Subtask task : epics.get(ID).getSubtasks().values()) {
                 for (Subtask subtask : subtasks.values()) {
                     if (task.getID() == subtask.getID()) {
-                        subtasks.remove(task.getID());
+                        historyManager.remove(task.getID());
+                        subtasksNeedToRemove.add(subtasks.get(task.getID()));
                     }
                 }
             }
+            for (Subtask subtask : subtasksNeedToRemove) {
+                historyManager.remove(subtask.getID());
+                subtasks.remove(subtask.getID());
+            }
+            subtasksNeedToRemove.clear();
+            historyManager.remove(ID);
             epics.remove(ID);
         }
     }
