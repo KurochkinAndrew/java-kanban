@@ -5,12 +5,13 @@ import tasks.*;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
     private int newID = 0;
 
     @Override
@@ -39,6 +40,14 @@ public class InMemoryTaskManager implements TaskManager {
         return allTasks;
     }
 
+    protected HashMap<Integer, Epic> getMapOfEpics(){
+        return epics;
+    }
+
+    protected HashMap<Integer, Subtask> getMapOfSubtasks(){
+        return subtasks;
+    }
+
     @Override
     public ArrayList getAllSubtasks() {
         ArrayList<String> allTasks = new ArrayList<>();
@@ -46,6 +55,14 @@ public class InMemoryTaskManager implements TaskManager {
             allTasks.add(task.getName());
         }
         return allTasks;
+    }
+
+    protected TreeSet<Task> getTreeSetOfTasks(){
+        TreeSet<Task> treeSet = new TreeSet<Task>(new TaskComparator());
+       treeSet.addAll(tasks.values());
+        treeSet.addAll(epics.values());
+        treeSet.addAll(subtasks.values());
+        return treeSet;
     }
 
     @Override
@@ -94,6 +111,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskByID(int ID) {
         historyManager.add(subtasks.get(ID));
+        return subtasks.get(ID);
+    }
+
+
+    protected Task getTaskByIdWithoutHistoryAdd(int ID) {
+        return tasks.get(ID);
+    }
+
+
+    protected Epic getEpicByIdWithoutHistoryAdd(int ID) {
+        return epics.get(ID);
+    }
+
+
+    protected Subtask getSubtaskByIdWithoutHistoryAdd(int ID) {
         return subtasks.get(ID);
     }
 

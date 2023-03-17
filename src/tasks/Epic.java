@@ -1,5 +1,7 @@
 package tasks;
 
+import manager.Status;
+
 import java.util.HashMap;
 
 
@@ -9,6 +11,11 @@ public class Epic extends Task {
 
     public Epic(String name, String description) {
         super(name, description);
+        super.setType(TypeOfTask.EPIC);
+    }
+
+    public Epic(String name, String description, Status status, TypeOfTask type) {
+        super(name, description, status, type);
     }
 
     public void addSubtask(int subtaskID, Subtask subtask) {
@@ -22,6 +29,5 @@ public class Epic extends Task {
     public HashMap<Integer, Subtask> getSubtasks() {
         return subtasks;
     }
-
 
 }

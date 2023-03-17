@@ -21,10 +21,8 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-
         historyLinkedList.removeNode(new Node(null, task, null));
         historyLinkedList.linkLast(task);
-
     }
 
     class CustomLinkedList {
