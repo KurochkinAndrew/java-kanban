@@ -9,8 +9,7 @@ import java.nio.file.Paths;
 
 public class Managers {
     public static FileBackedTasksManager getDefault() {
-        return new FileBackedTasksManager(Paths.get("C:\\Users\\Вячеслав Украинцевв" +
-                "\\IdeaProjects\\java-kanban\\src\\Saves.txt"));
+        return new FileBackedTasksManager(Paths.get("\\Saves.txt"));
     }
 
 
