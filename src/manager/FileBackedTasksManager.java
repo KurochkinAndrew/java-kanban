@@ -4,14 +4,17 @@ import manager.History.HistoryManager;
 import tasks.*;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private String saveFilePath;
+    private Path saveFilePath;
 
-    public FileBackedTasksManager(String saveFilePath) {
+    public FileBackedTasksManager(Path saveFilePath) {
         this.saveFilePath = saveFilePath;
     }
 
@@ -51,26 +54,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public Task taskFromString(String taskString) {
         String[] splitTaskString = taskString.split(",");
         if (splitTaskString.length > 1) {
-            if ((splitTaskString[1].equals("SUBTASK"))) {
+            if (splitTaskString[1].equals(TypeOfTask.SUBTASK.toString())) {
                 return new Subtask(splitTaskString[2], splitTaskString[4],
                         Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]),
                         Integer.parseInt(splitTaskString[5]));
-            } else if (splitTaskString[1].equals("TASK")) {
+            } else if (splitTaskString[1].equals(TypeOfTask.TASK.toString())) {
                 return new Task(splitTaskString[2], splitTaskString[4],
                         Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]));
-            } else if (splitTaskString[1].equals("EPIC")) {
+            } else if (splitTaskString[1].equals(TypeOfTask.EPIC.toString())) {
                 return new Epic(splitTaskString[2], splitTaskString[4],
                         Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]));
-            } else {
-                return null;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     public void loadFromFile() {
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFilePath))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFilePath.toString()))) {
             while (fileReader.ready()) {
                 String s = fileReader.readLine();
                 Task task = taskFromString(s);
@@ -81,11 +81,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     } else {
                         super.makeNewTask(task);
                     }
-                } else if (s.contains("История")) {
+                } else if (!(s.contains(TypeOfTask.TASK.toString())) && !(s.contains(TypeOfTask.EPIC.toString())) &&
+                        !(s.contains("id"))) {
                     for (int ID : historyFromString(s)) {
-                        if (getTaskByIdWithoutHistoryAdd(ID) != null){
+                        if (getTaskByIdWithoutHistoryAdd(ID) != null) {
                             historyManager.add(getTaskByIdWithoutHistoryAdd(ID));
-                        } else if(getSubtaskByIdWithoutHistoryAdd(ID) != null){
+                        } else if (getSubtaskByIdWithoutHistoryAdd(ID) != null) {
                             historyManager.add(getSubtaskByIdWithoutHistoryAdd(ID));
                         } else {
                             historyManager.add(getEpicByIdWithoutHistoryAdd(ID));
@@ -93,53 +94,47 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     }
                 }
             }
-            for (Epic epic: getMapOfEpics().values()){
-                for (Subtask subtask: getMapOfSubtasks().values()){
-                    if (subtask.getEpicOwnerID() == epic.getID()){
+            for (Epic epic : getMapOfEpics().values()) {
+                for (Subtask subtask : getMapOfSubtasks().values()) {
+                    if (subtask.getEpicOwnerID() == epic.getID()) {
                         epic.addSubtask(subtask.getID(), subtask);
                     }
                 }
             }
         } catch (IOException e) {
-            }
-        }
-
-    public void save() {
-        try (FileWriter writer = new FileWriter(saveFilePath)) {
-            writer.write("//id,type,name,status,description,epic");
-            writer.write(System.getProperty("line.separator"));
-        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        try (FileWriter writer = new FileWriter(saveFilePath, true)) {
+    }
+
+    public void save() {
+        try (BufferedWriter writer = Files.newBufferedWriter(saveFilePath, StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write("id,type,name,status,description,epic");
+            writer.write(System.getProperty("line.separator"));
             for (Task task : getTreeSetOfTasks()) {
                 writer.write(task.toString());
                 writer.write(System.getProperty("line.separator"));
             }
-            writer.write(System.getProperty("line.separator"));
-            writer.write("//История,");
             writer.write(historyToString(historyManager));
         } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public static String historyToString(HistoryManager manager) {
-        String historyString = "";
+        StringBuilder historyString = new StringBuilder();
         for (Task task : manager.getHistory()) {
-            historyString += task.getID();
+            historyString.append(task.getID());
             if (task != manager.getHistory().get(manager.getHistory().size() - 1)) {
-                historyString += ",";
+                historyString.append(",");
             }
         }
-        return historyString;
+        return historyString.toString();
     }
 
     public static List<Integer> historyFromString(String historyString) {
-        ArrayList<Integer> historyList = new ArrayList<>();
+        LinkedList<Integer> historyList = new LinkedList<>();
         for (String s : historyString.split(",")) {
-            if (!(s.contains("/"))) {
-                historyList.add(Integer.parseInt(s));
-            }
+            historyList.add(Integer.parseInt(s));
         }
         return historyList;
     }

@@ -8,10 +8,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Managers {
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    public static FileBackedTasksManager getDefault() {
+        return new FileBackedTasksManager(Paths.get("C:\\Users\\Вячеслав Украинцевв" +
+                "\\IdeaProjects\\java-kanban\\src\\Saves.txt"));
     }
-    public static FileBackedTasksManager getFileManager(){return new FileBackedTasksManager("src\\Saves.txt");}
+
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();

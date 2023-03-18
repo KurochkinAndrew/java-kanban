@@ -40,11 +40,11 @@ public class InMemoryTaskManager implements TaskManager {
         return allTasks;
     }
 
-    protected HashMap<Integer, Epic> getMapOfEpics(){
+    protected HashMap<Integer, Epic> getMapOfEpics() {
         return epics;
     }
 
-    protected HashMap<Integer, Subtask> getMapOfSubtasks(){
+    protected HashMap<Integer, Subtask> getMapOfSubtasks() {
         return subtasks;
     }
 
@@ -57,9 +57,9 @@ public class InMemoryTaskManager implements TaskManager {
         return allTasks;
     }
 
-    protected TreeSet<Task> getTreeSetOfTasks(){
+    protected TreeSet<Task> getTreeSetOfTasks() {
         TreeSet<Task> treeSet = new TreeSet<Task>(new TaskComparator());
-       treeSet.addAll(tasks.values());
+        treeSet.addAll(tasks.values());
         treeSet.addAll(epics.values());
         treeSet.addAll(subtasks.values());
         return treeSet;
