@@ -82,7 +82,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         super.makeNewTask(task);
                     }
                 } else if (!(s.contains(TypeOfTask.TASK.toString())) && !(s.contains(TypeOfTask.EPIC.toString())) &&
-                        !(s.contains("id"))) {
+                        !(s.contains("id")) && !(s.isBlank())) {
                     for (int ID : historyFromString(s)) {
                         if (getTaskByIdWithoutHistoryAdd(ID) != null) {
                             historyManager.add(getTaskByIdWithoutHistoryAdd(ID));
@@ -108,12 +108,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public void save() {
         try (BufferedWriter writer = Files.newBufferedWriter(saveFilePath, StandardOpenOption.TRUNCATE_EXISTING)) {
-            writer.write("id,type,name,status,description,epic");
+            writer.write("id,type,name,status,description, epic");
             writer.write(System.getProperty("line.separator"));
             for (Task task : getTreeSetOfTasks()) {
                 writer.write(task.toString());
                 writer.write(System.getProperty("line.separator"));
             }
+            writer.write(System.getProperty("line.separator"));
             writer.write(historyToString(historyManager));
         } catch (IOException e) {
             System.out.println(e.getMessage());
