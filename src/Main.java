@@ -16,7 +16,18 @@ public class Main {
         Subtask subtask3 = new Subtask("Купить моющее средство", "Сходить в магазин хозтоваров",
                 Status.NEW);
 
-
+        manager.makeNewTask(task1);
+        manager.makeNewTask(task2);
+        manager.makeNewTask(epic1);
+        manager.makeNewSubtask(subtask1, epic1.getID());
+        manager.makeNewSubtask(subtask2, epic1.getID());
+        manager.makeNewTask(epic2);
+        manager.makeNewSubtask(subtask3, epic2.getID());
+        manager.getTaskByID(task1.getID());
+        manager.getSubtaskByID(subtask2.getID());
+        manager.getTaskByID(task1.getID());
+        manager.getTaskByID(task2.getID());
+        manager.removeTaskByID(task2.getID());
         FileBackedTasksManager manager2 = Managers.getDefault();
         manager2.loadFromFile();
         manager2.getHistory();
