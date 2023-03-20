@@ -1,7 +1,6 @@
 package tasks;
 
 import manager.Status;
-
 import java.util.HashMap;
 
 
