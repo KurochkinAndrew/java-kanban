@@ -3,6 +3,7 @@ package manager;
 import tasks.*;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public interface TaskManager {
     ArrayList getAllTasks();
@@ -44,6 +45,8 @@ public interface TaskManager {
     Status calculateStatusOfEpic(int ID);
 
     void getHistory();
+
+    TreeSet<Task> getPrioritizedTasks();
 
 
 }

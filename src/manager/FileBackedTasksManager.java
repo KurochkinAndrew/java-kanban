@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,10 +60,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             if (splitTaskString[1].equals(TypeOfTask.SUBTASK.toString())) {
                 return new Subtask(splitTaskString[2], splitTaskString[4],
                         Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]),
-                        Integer.parseInt(splitTaskString[5]));
+                        Integer.parseInt(splitTaskString[7]),
+                        LocalDateTime.parse(splitTaskString[5], Task.startTimeFormatter),
+                        Duration.parse(splitTaskString[6]));
             } else if (splitTaskString[1].equals(TypeOfTask.TASK.toString())) {
                 return new Task(splitTaskString[2], splitTaskString[4],
-                        Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]));
+                        Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]),
+                        LocalDateTime.parse(splitTaskString[5], Task.startTimeFormatter),
+                        Duration.parse(splitTaskString[6]));
             } else if (splitTaskString[1].equals(TypeOfTask.EPIC.toString())) {
                 return new Epic(splitTaskString[2], splitTaskString[4],
                         Status.valueOf(splitTaskString[3]), TypeOfTask.valueOf(splitTaskString[1]));
@@ -109,7 +115,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public void save() {
         try (BufferedWriter writer = Files.newBufferedWriter(saveFilePath, StandardOpenOption.TRUNCATE_EXISTING)) {
-            writer.write("id,type,name,status,description, epic");
+            writer.write("id,type,name,status,description, startTime, duration, epic");
             writer.write(System.getProperty("line.separator"));
             for (Task task : getTreeSetOfTasks()) {
                 writer.write(task.toString());

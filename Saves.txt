@@ -1,10 +1,5 @@
-id,type,name,status,description, epic
-0,TASK,Помыть посуду,NEW,Нужно помыть посуду до прихода гостей,
-1,TASK,Погулять с собакой,NEW,Вечерняя прогулка,
-2,EPIC,Починить машину,IN_PROGRESS,Нужно поменять топливный насос,
-3,SUBTASK,Купить детали,DONE,Купить топливный насос и болты,2
-4,SUBTASK,Установить детали,NEW,Установить топливный насос и болты,2
-5,EPIC,Убраться дома,NEW,Помыть полы,
-6,SUBTASK,Купить моющее средство,NEW,Сходить в магазин хозтоваров,5
+id,type,name,status,description, startTime, duration, epic
+0,EPIC,,IN_PROGRESS,,01.05.2023|00:24,PT2S,
+1,SUBTASK,,DONE,,01.05.2023|00:24,PT1S,0
+2,SUBTASK,,NEW,,01.05.2023|00:24,PT1S,0
 
-4,0,1

@@ -2,6 +2,9 @@ package tasks;
 
 import manager.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int epicOwnerID;
 
@@ -17,6 +20,24 @@ public class Subtask extends Task {
     public Subtask(String name, String description, Status status, TypeOfTask type, int epicOwnerID) {
         super(name, description, status, type);
         this.epicOwnerID = epicOwnerID;
+    }
+    public Subtask(String name, String description, Status status, int epicOwnerID,
+                   LocalDateTime startTime, Duration duration) {
+        super(name, description, status, startTime, duration);
+        this.epicOwnerID = epicOwnerID;
+        super.setType(TypeOfTask.SUBTASK);
+    }
+    public Subtask(String name, String description, Status status,
+                   LocalDateTime startTime, Duration duration) {
+        super(name, description, status, startTime, duration);
+        super.setType(TypeOfTask.SUBTASK);
+    }
+
+    public Subtask(String name, String description, Status status, TypeOfTask type, int epicOwnerID,
+                   LocalDateTime startTime, Duration duration) {
+        super(name, description, status, type, startTime, duration);
+        this.epicOwnerID = epicOwnerID;
+        super.setType(TypeOfTask.SUBTASK);
     }
 
     public int getEpicOwnerID() {

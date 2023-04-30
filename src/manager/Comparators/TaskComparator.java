@@ -1,4 +1,4 @@
-package manager;
+package manager.Comparators;
 
 import tasks.Task;
 

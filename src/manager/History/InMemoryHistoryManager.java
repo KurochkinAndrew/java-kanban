@@ -62,6 +62,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                     } else {
                         tail = nodes.get(node.data.getID()).prev;
                     }
+                    nodes.remove(node.data.getID());
                 }
             }
         }

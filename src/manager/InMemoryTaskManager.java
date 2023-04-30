@@ -1,5 +1,7 @@
 package manager;
 
+import manager.Comparators.StartTimeTaskComparator;
+import manager.Comparators.TaskComparator;
 import manager.History.HistoryManager;
 import tasks.*;
 
@@ -11,8 +13,20 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private TreeSet<Task> prioritizedTasks = new TreeSet<>(new StartTimeTaskComparator());
     protected HistoryManager historyManager = Managers.getDefaultHistory();
     private int newID = 0;
+
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
+
+    public InMemoryTaskManager() {
+    }
+
+    public void removefromhistory(int ID) {
+        historyManager.remove(ID);
+    }
 
     @Override
     public ArrayList getAllTasks() {
@@ -40,12 +54,16 @@ public class InMemoryTaskManager implements TaskManager {
         return allTasks;
     }
 
-    protected HashMap<Integer, Epic> getMapOfEpics() {
+    public HashMap<Integer, Epic> getMapOfEpics() {
         return epics;
     }
 
-    protected HashMap<Integer, Subtask> getMapOfSubtasks() {
+    public HashMap<Integer, Subtask> getMapOfSubtasks() {
         return subtasks;
+    }
+
+    public HashMap<Integer, Task> getMapOfTasks() {
+        return tasks;
     }
 
     @Override
@@ -57,7 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
         return allTasks;
     }
 
-    protected TreeSet<Task> getTreeSetOfTasks() {
+    public TreeSet<Task> getTreeSetOfTasks() {
         TreeSet<Task> treeSet = new TreeSet<Task>(new TaskComparator());
         treeSet.addAll(tasks.values());
         treeSet.addAll(epics.values());
@@ -84,15 +102,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void makeNewTask(Object task) {
-        if (task.getClass() == Task.class) {
-            tasks.put(newID, (Task) task);
-            tasks.get(newID).setID(newID);
-            newID++;
-        } else if (task.getClass() == Epic.class) {
-            epics.put(newID, (Epic) task);
-            epics.get(newID).setID(newID);
-            epics.get(newID).setStatus(Status.NEW);
-            newID++;
+        Task t = (Task) task;
+        if (!isOverlappedInTime(task)) {
+            if (task.getClass() == Task.class) {
+                tasks.put(newID, (Task) task);
+                prioritizedTasks.add((Task) task);
+                tasks.get(newID).setID(newID);
+                newID++;
+            } else if (task.getClass() == Epic.class) {
+                epics.put(newID, (Epic) task);
+                prioritizedTasks.add((Task) task);
+                epics.get(newID).setID(newID);
+                epics.get(newID).setStatus(Status.NEW);
+                newID++;
+            }
+        } else {
+            System.out.println("Задачи не могут пересекаться по времени. Задача \"" + t.getName()
+                    + "\" не создана.");
         }
     }
 
@@ -114,6 +140,11 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks.get(ID);
     }
 
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+    }
+
 
     protected Task getTaskByIdWithoutHistoryAdd(int ID) {
         return tasks.get(ID);
@@ -131,35 +162,60 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void makeNewSubtask(Subtask task, int epicID) {
-        subtasks.put(newID, task);
-        epics.get(epicID).addSubtask(newID, task);
-        subtasks.get(newID).setID(newID);
-        subtasks.get(newID).setEpicOwnerID(epicID);
-        newID++;
-        epics.get(epicID).setStatus(calculateStatusOfEpic(epicID));
+        prioritizedTasks.remove(epics.get(epicID));
+            if (!isOverlappedInTime(task)) {
+                subtasks.put(newID, task);
+                prioritizedTasks.add(task);
+                epics.get(epicID).addSubtask(newID, task);
+                subtasks.get(newID).setID(newID);
+                subtasks.get(newID).setEpicOwnerID(epicID);
+                newID++;
+                epics.get(epicID).setStatus(calculateStatusOfEpic(epicID));
+            } else {
+                System.out.println("Задачи не могут пересекаться по времени. Задача \"" + task.getName()
+                        + "\" не создана.");
+            }
+            prioritizedTasks.add(epics.get(epicID));
     }
 
     @Override
     public void refreshTask(Task task, int ID) {
-        if (tasks.containsKey(ID)) {
-            tasks.put(ID, task);
+        if (!isOverlappedInTime(task)) {
+            if (tasks.containsKey(ID)) {
+                tasks.put(ID, task);
+                task.setID(ID);
+            }
+        } else {
+            System.out.println("Задачи не могут пересекаться по времени. Задача \"" + task.getName()
+                    + "\" не создана.");
         }
     }
 
     @Override
     public void refreshEpic(Epic task, int ID) {
-        if (epics.containsKey(ID)) {
-            epics.put(ID, task);
+        if (!isOverlappedInTime(task)) {
+            if (epics.containsKey(ID)) {
+                epics.put(ID, task);
+                task.setID(ID);
+            }
+        } else {
+            System.out.println("Задачи не могут пересекаться по времени. Задача \"" + task.getName()
+                    + "\" не создана.");
         }
     }
 
     @Override
     public void refreshSubtask(Subtask task, int ID) {
-        if (subtasks.containsKey(ID)) {
-            subtasks.put(ID, task);
-            epics.get(subtasks.get(ID).getEpicOwnerID()).addSubtask(ID, task);
-            epics.get(subtasks.get(ID).getEpicOwnerID()).
-                    setStatus(calculateStatusOfEpic(subtasks.get(ID).getEpicOwnerID()));
+        if (!isOverlappedInTime(task)) {
+            if (subtasks.containsKey(ID)) {
+                subtasks.put(ID, task);
+                epics.get(subtasks.get(ID).getEpicOwnerID()).addSubtask(ID, task);
+                epics.get(subtasks.get(ID).getEpicOwnerID()).
+                        setStatus(calculateStatusOfEpic(subtasks.get(ID).getEpicOwnerID()));
+            }
+        } else {
+            System.out.println("Задачи не могут пересекаться по времени. Задача \"" + task.getName()
+                    + "\" не создана.");
         }
     }
 
@@ -241,6 +297,21 @@ public class InMemoryTaskManager implements TaskManager {
             status = status.NEW;
         }
         return status;
+    }
+
+    protected boolean isOverlappedInTime(Object task) {
+        Task t = (Task) task;
+        if (t.getStartTime() != null) {
+            for (Task t2 : getTreeSetOfTasks()) {
+                if (t2.getStartTime() != null) {
+                    if ((t.getStartTime().isAfter(t2.getStartTime()) && t.getStartTime().isBefore(t2.getEndTime())) ||
+                            (t.getEndTime().isAfter(t2.getStartTime()) && t.getEndTime().isBefore(t2.getEndTime()))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
 
