@@ -15,22 +15,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class EpicStatusCalculatorTest {
     FileBackedTasksManager manager;
     Epic epic1 = new Epic("", "");
-    Subtask subtask1 = new Subtask("", "", Status.NEW, LocalDateTime.now(), Duration.ofSeconds(1));
-    Subtask subtask2 = new Subtask("", "", Status.NEW, LocalDateTime.now().plus(Duration.ofSeconds(2)),
-            Duration.ofSeconds(1));
-    Subtask subtask3 = new Subtask("", "", Status.DONE, LocalDateTime.now().plus(Duration.ofSeconds(3)),
-            Duration.ofSeconds(1));
-    Subtask subtask4 = new Subtask("", "", Status.DONE, LocalDateTime.now().plus(Duration.ofSeconds(4)),
-            Duration.ofSeconds(1));
-    Subtask subtask5 = new Subtask("", "", Status.IN_PROGRESS,
-            LocalDateTime.now().plus(Duration.ofSeconds(5)), Duration.ofSeconds(1));
-    Subtask subtask6 = new Subtask("", "", Status.IN_PROGRESS,
-            LocalDateTime.now().plus(Duration.ofSeconds(6)), Duration.ofSeconds(1));
+    Subtask subtask1, subtask2, subtask3, subtask4, subtask5, subtask6;
 
     @BeforeEach
     void beforeEach(){
         manager = Managers.getDefault();
+        epic1 = new Epic("", "");
         manager.makeNewTask(epic1);
+        subtask1 = new Subtask("", "", Status.NEW, LocalDateTime.now(), Duration.ofSeconds(1));
+        subtask2 = new Subtask("", "", Status.NEW, LocalDateTime.now().plus(Duration.ofSeconds(2)),
+                Duration.ofSeconds(1));
+        subtask3 = new Subtask("", "", Status.DONE, LocalDateTime.now().plus(Duration.ofSeconds(3)),
+                Duration.ofSeconds(1));
+        subtask4 = new Subtask("", "", Status.DONE, LocalDateTime.now().plus(Duration.ofSeconds(4)),
+                Duration.ofSeconds(1));
+        subtask5 = new Subtask("", "", Status.IN_PROGRESS,
+                LocalDateTime.now().plus(Duration.ofSeconds(5)), Duration.ofMinutes(1));
+        subtask6 = new Subtask("", "", Status.IN_PROGRESS,
+                LocalDateTime.now().plus(Duration.ofSeconds(6)), Duration.ofSeconds(1));
     }
 
     @Test

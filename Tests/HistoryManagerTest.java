@@ -9,6 +9,8 @@ import tasks.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +23,7 @@ public class HistoryManagerTest {
             LocalDateTime.now().plus(Duration.ofSeconds(2)), Duration.ofSeconds(1));
     Task task3 = new Task("TestName3", "TestDescription3", Status.IN_PROGRESS,
             LocalDateTime.now().plus(Duration.ofSeconds(3)), Duration.ofSeconds(1));
+    List<Task> expected;
 
     @BeforeEach
     void beforeEach() {
@@ -55,25 +58,22 @@ public class HistoryManagerTest {
         manager.getTaskByID(task3.getID());
         historyManager.remove(task3.getID());
         ArrayList history = historyManager.getHistory();
-        assertEquals(2, history.size());
-        assertEquals(task1, history.get(0));
-        assertEquals(task2, history.get(1));
+        expected = Arrays.asList(task1, task2);
+        assertEquals(expected, history);
         manager.getTaskByID(task1.getID());
         manager.getTaskByID(task2.getID());
         manager.getTaskByID(task3.getID());
         historyManager.remove(task1.getID());
         history = historyManager.getHistory();
-        assertEquals(2, history.size());
-        assertEquals(task2, history.get(0));
-        assertEquals(task3, history.get(1));
+        expected = Arrays.asList(task2, task3);
+        assertEquals(expected, history);
         manager.getTaskByID(task1.getID());
         manager.getTaskByID(task2.getID());
         manager.getTaskByID(task3.getID());
         historyManager.remove(task2.getID());
         history = historyManager.getHistory();
-        assertEquals(2, history.size());
-        assertEquals(task1, history.get(0));
-        assertEquals(task3, history.get(1));
+        expected = Arrays.asList(task1, task3);
+        assertEquals(expected, history);
     }
 
     @Test
@@ -81,8 +81,7 @@ public class HistoryManagerTest {
         historyManager.add(task1);
         historyManager.add(task2);
         ArrayList history = historyManager.getHistory();
-        assertEquals(2, history.size());
-        assertEquals(task1, history.get(0));
-        assertEquals(task2, history.get(1));
+        expected = Arrays.asList(task1, task2);
+        assertEquals(expected, history);
     }
 }

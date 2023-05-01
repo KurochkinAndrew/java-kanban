@@ -103,7 +103,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void makeNewTask(Object task) {
         Task t = (Task) task;
-        if (!isOverlappedInTime(task)) {
+        if (!isOverlappedInTime(t)) {
             if (task.getClass() == Task.class) {
                 tasks.put(newID, (Task) task);
                 prioritizedTasks.add((Task) task);
@@ -299,17 +299,21 @@ public class InMemoryTaskManager implements TaskManager {
         return status;
     }
 
-    protected boolean isOverlappedInTime(Object task) {
-        Task t = (Task) task;
-        if (t.getStartTime() != null) {
+    protected boolean isOverlappedInTime(Task task) {
+        if (task.getStartTime() != null) {
             for (Task t2 : getTreeSetOfTasks()) {
-                if (t2.getStartTime() != null) {
-                    if ((t.getStartTime().isAfter(t2.getStartTime()) && t.getStartTime().isBefore(t2.getEndTime())) ||
-                            (t.getEndTime().isAfter(t2.getStartTime()) && t.getEndTime().isBefore(t2.getEndTime()))) {
-                        return true;
-                    }
+                if (t2.getStartTime() == null) {
+                    continue;
+                }
+                boolean startTimeOverlap = (task.getStartTime().isAfter(t2.getStartTime()) &&
+                        task.getStartTime().isBefore(t2.getEndTime()));
+                boolean endTimeOverlap = task.getEndTime().isAfter(t2.getStartTime()) &&
+                        task.getEndTime().isBefore(t2.getEndTime());
+                if (startTimeOverlap || endTimeOverlap) {
+                    return true;
                 }
             }
+            return false;
         }
         return false;
     }

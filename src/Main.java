@@ -21,12 +21,25 @@ public class Main {
                 Status.NEW, LocalDateTime.of(2023,1,1,0,40), Duration.ofSeconds(150));
         //manager.loadFromFile();
         manager.makeNewTask(epic1);
+        for (Task task: manager.getPrioritizedTasks()){
+            System.out.println(task);
+        }
+        System.out.println("/");
         manager.makeNewSubtask(subtask1, epic1.getID());
+        for (Task task: manager.getPrioritizedTasks()){
+            System.out.println(task);
+        }
+        System.out.println("/");
         manager.makeNewSubtask(subtask2, epic1.getID());
+        for (Task task: manager.getPrioritizedTasks()){
+            System.out.println(task);
+        }
+        System.out.println("/");
         manager.makeNewSubtask(subtask3, epic1.getID());
         for (Task task: manager.getPrioritizedTasks()){
             System.out.println(task);
         }
+        System.out.println("/");
     }
 
 }
