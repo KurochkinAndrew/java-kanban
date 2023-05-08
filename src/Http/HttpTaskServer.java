@@ -26,7 +26,7 @@ public class HttpTaskServer {
 
     public HttpTaskServer() {
         try {
-            server = HttpServer.create(new InetSocketAddress(8080), 0);
+            server = HttpServer.create(new InetSocketAddress("localhost", 8080), 0);
             server.createContext("/tasks/task/", new TasksHandler());
             server.createContext("/tasks/epic/", new EpicsHandler());
             server.createContext("/tasks/subtask/", new SubtasksHandler());

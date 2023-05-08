@@ -26,6 +26,7 @@ public class Main {
         new KVServer().start();
         HttpTaskManager manager = Managers.getDefault();
         HttpTaskServer server = new HttpTaskServer();
+
         server.start();
         //Можешь, пожалуйста, оставить все ошибки под тегом "можно лучше", просто 10.05 жесткий дедлайн, и если 9.05
         // будет не принят проект, то меня отчислят)) Я обязательно все ошибки исправлю!
