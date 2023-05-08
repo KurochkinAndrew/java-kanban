@@ -27,6 +27,15 @@ public class Subtask extends Task {
         this.epicOwnerID = epicOwnerID;
         super.setType(TypeOfTask.SUBTASK);
     }
+
+    public Subtask(String name, String description, Status status, int epicOwnerID,
+                   LocalDateTime startTime, Duration duration, int ID) {
+        super(name, description, status, startTime, duration);
+        this.epicOwnerID = epicOwnerID;
+        super.setType(TypeOfTask.SUBTASK);
+        setID(ID);
+    }
+
     public Subtask(String name, String description, Status status,
                    LocalDateTime startTime, Duration duration) {
         super(name, description, status, startTime, duration);

@@ -11,7 +11,7 @@ public class Task implements Comparable<Task>{
     private String description;
     private Status status;
 
-    private int ID;
+    private Integer ID;
     protected TypeOfTask type = TypeOfTask.TASK;
     public static DateTimeFormatter startTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy|HH:mm");
 
@@ -23,6 +23,7 @@ public class Task implements Comparable<Task>{
         this.description = description;
         this.status = status;
     }
+
 
     public Task(String name, String description, Status status, TypeOfTask type) {
         this.name = name;
@@ -44,6 +45,15 @@ public class Task implements Comparable<Task>{
         this.duration = duration;
     }
 
+    public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration, int ID) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.ID = ID;
+    }
+
     public Task(String name, String description, Status status, TypeOfTask type, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
@@ -60,7 +70,7 @@ public class Task implements Comparable<Task>{
         return type;
     }
 
-    public int getID() {
+    public Integer getID() {
         return ID;
     }
 

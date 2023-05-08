@@ -17,6 +17,18 @@ public class Epic extends Task {
         super.setType(TypeOfTask.EPIC);
     }
 
+    public Epic(String name, String description, int ID) {
+        super(name, description);
+        super.setType(TypeOfTask.EPIC);
+        super.setID(ID);
+    }
+
+    public Epic(String name, String description, int ID, Status status) {
+        super(name, description, status);
+        super.setType(TypeOfTask.EPIC);
+        super.setID(ID);
+    }
+
     public Epic(String name, String description, Status status, TypeOfTask type) {
         super(name, description, status, type);
     }

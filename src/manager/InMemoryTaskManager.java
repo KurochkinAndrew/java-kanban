@@ -45,6 +45,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public ArrayList getHistoryAsList() {
+        ArrayList<String> history = new ArrayList<>();
+        for (Task task : historyManager.getHistory()) {
+           history.add(task.getName());
+        }
+        return history;
+    }
+
     @Override
     public ArrayList getAllEpics() {
         ArrayList<String> allTasks = new ArrayList<>();
@@ -100,6 +108,13 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.clear();
     }
 
+    public void removeAll(){
+        tasks.clear();
+        epics.clear();
+        subtasks.clear();
+        newID = 0;
+    }
+
     @Override
     public void makeNewTask(Object task) {
         Task t = (Task) task;
@@ -146,17 +161,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    protected Task getTaskByIdWithoutHistoryAdd(int ID) {
+    public Task getTaskByIdWithoutHistoryAdd(int ID) {
         return tasks.get(ID);
     }
 
 
-    protected Epic getEpicByIdWithoutHistoryAdd(int ID) {
+    public Epic getEpicByIdWithoutHistoryAdd(int ID) {
         return epics.get(ID);
     }
 
 
-    protected Subtask getSubtaskByIdWithoutHistoryAdd(int ID) {
+    public Subtask getSubtaskByIdWithoutHistoryAdd(int ID) {
         return subtasks.get(ID);
     }
 

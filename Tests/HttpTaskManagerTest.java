@@ -1,12 +1,16 @@
-package Tests;
 
 
-import manager.FileBackedTasksManager;
+
+import Http.KVServer;
+import manager.HttpTaskManager;
 import manager.Managers;
 import manager.Status;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.*;
+
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,8 +18,9 @@ import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TaskManagerTest {
-    FileBackedTasksManager manager;
+public class HttpTaskManagerTest {
+    HttpTaskManager manager;
+    KVServer kvServer;
     Task task1 = new Task("TestName1", "TestDescription1", Status.NEW,
             LocalDateTime.now().plus(Duration.ofSeconds(1)), Duration.ofSeconds(1));
     Task task2 = new Task("TestName2", "TestDescription2", Status.DONE,
@@ -29,8 +34,15 @@ public class TaskManagerTest {
             LocalDateTime.now().plus(Duration.ofSeconds(4)), Duration.ofSeconds(1));
 
     @BeforeEach
-    void beforeEach() {
-        manager = new FileBackedTasksManager();
+    void beforeEach() throws IOException {
+        kvServer = new KVServer();
+        kvServer.start();
+        manager = Managers.getDefault();
+    }
+
+    @AfterEach
+    void afterAll(){
+        kvServer.stop();
     }
 
     @Test
@@ -195,6 +207,18 @@ public class TaskManagerTest {
         assertEquals(task1, prioritizedTasks.toArray()[0]);
         assertEquals(task2, prioritizedTasks.toArray()[1]);
         assertEquals(task3, prioritizedTasks.toArray()[2]);
+    }
+
+    @Test
+    void saveToServerAndLoadFromServerTest(){
+        manager.makeNewTask(task1);
+        manager.makeNewTask(task2);
+        manager.makeNewTask(epic1);
+        TreeSet<Task> expected = manager.getPrioritizedTasks();
+        manager.removeAll();
+        manager.loadFromServer();
+        TreeSet<Task> actual = manager.getPrioritizedTasks();
+        assertArrayEquals(expected.toArray(), actual.toArray());
     }
 
 }

@@ -2,11 +2,17 @@ package manager;
 
 import manager.History.HistoryManager;
 import manager.History.InMemoryHistoryManager;
+
+import java.io.IOException;
 import java.nio.file.Paths;
 
 public class Managers {
-    public static FileBackedTasksManager getDefault() {
-        return new FileBackedTasksManager(Paths.get(System.getProperty("user.dir"),"/Saves.txt"));
+    public static HttpTaskManager getDefault() {
+        try {
+            return new HttpTaskManager("http://localhost:8078/");
+        } catch (IOException | InterruptedException e){
+            return null;
+        }
     }
 
 

@@ -27,7 +27,7 @@ public class TimeOfTasksTest {
 
     @BeforeEach
     void beforeEach() {
-        fileBackedTasksManager = Managers.getDefault();
+        fileBackedTasksManager = new FileBackedTasksManager();
     }
 
     @Test
@@ -60,7 +60,7 @@ public class TimeOfTasksTest {
     }
 
     @Test
-    void TimeOfEpicTest(){
+    void timeOfEpicTest(){
         fileBackedTasksManager.makeNewTask(epic1);
         fileBackedTasksManager.makeNewSubtask(subtask1, epic1.getID());
         fileBackedTasksManager.makeNewSubtask(subtask2, epic1.getID());
@@ -72,7 +72,7 @@ public class TimeOfTasksTest {
     }
 
     @Test
-    void TimeOfEpicShouldBeNullWhenItHasNotSubtasks(){
+    void timeOfEpicShouldBeNullWhenItHasNoSubtasks(){
         fileBackedTasksManager.makeNewTask(epic1);
         assertEquals(null, epic1.getStartTime());
         assertEquals(null, epic1.getEndTime());

@@ -15,11 +15,12 @@ import java.util.List;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private Path saveFilePath;
+    private Path saveFilePath = Paths.get(System.getProperty("user.dir"),"/Saves.txt");
 
     public FileBackedTasksManager(Path saveFilePath) {
         this.saveFilePath = saveFilePath;
     }
+    public FileBackedTasksManager(){}
 
     @Override
     public void makeNewTask(Object Task) {
@@ -75,7 +76,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
         return null;
     }
+    public void clearSaveFile(){
+        try (BufferedWriter writer = Files.newBufferedWriter(saveFilePath, StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write("");
+        } catch (IOException e){
 
+        }
+    }
     public void loadFromFile() {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFilePath.toString()))) {
             while (fileReader.ready()) {
@@ -141,8 +148,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static List<Integer> historyFromString(String historyString) {
         LinkedList<Integer> historyList = new LinkedList<>();
-        for (String s : historyString.split(",")) {
-            historyList.add(Integer.parseInt(s));
+        if (!historyString.isBlank()) {
+            for (String s : historyString.split(",")) {
+                historyList.add(Integer.parseInt(s));
+            }
         }
         return historyList;
     }

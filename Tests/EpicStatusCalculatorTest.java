@@ -19,7 +19,7 @@ class EpicStatusCalculatorTest {
 
     @BeforeEach
     void beforeEach(){
-        manager = Managers.getDefault();
+        manager = new FileBackedTasksManager();
         epic1 = new Epic("", "");
         manager.makeNewTask(epic1);
         subtask1 = new Subtask("", "", Status.NEW, LocalDateTime.now(), Duration.ofSeconds(1));
