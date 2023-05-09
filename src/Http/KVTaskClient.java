@@ -17,7 +17,7 @@ public class KVTaskClient {
         HttpRequest request = HttpRequest.newBuilder().GET().uri(uri).build();
         HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> response = client.send(request, handler);
-        token = client.send(request, handler).body();
+        token = response.body();
         System.out.println(token);
     }
 

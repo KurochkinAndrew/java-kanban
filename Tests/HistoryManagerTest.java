@@ -15,15 +15,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HistoryManagerTest {
-    HistoryManager historyManager;
-    TaskManager manager;
-    Task task1 = new Task("TestName1", "TestDescription1", Status.NEW,
+    private HistoryManager historyManager;
+    private TaskManager manager;
+    private Task task1 = new Task("TestName1", "TestDescription1", Status.NEW,
             LocalDateTime.now().plus(Duration.ofSeconds(1)), Duration.ofSeconds(1));
-    Task task2 = new Task("TestName2", "TestDescription2", Status.DONE,
+    private Task task2 = new Task("TestName2", "TestDescription2", Status.DONE,
             LocalDateTime.now().plus(Duration.ofSeconds(2)), Duration.ofSeconds(1));
-    Task task3 = new Task("TestName3", "TestDescription3", Status.IN_PROGRESS,
+    private Task task3 = new Task("TestName3", "TestDescription3", Status.IN_PROGRESS,
             LocalDateTime.now().plus(Duration.ofSeconds(3)), Duration.ofSeconds(1));
-    List<Task> expected;
+    private List<Task> expected;
 
     @BeforeEach
     void beforeEach() {

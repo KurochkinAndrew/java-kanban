@@ -93,7 +93,7 @@ public class HttpTaskServer {
                             writeResponse(exchange, "Некорректный id", 400);
                         }
                         try {
-                            manager.getTaskByIdWithoutHistoryAdd(id);
+                            manager.getTaskByIdWithoutHistoryAdd(id).getID();
                             manager.removeTaskByID(id);
                             writeResponse(exchange, "Task удален", 200);
                         } catch (NullPointerException e) {
@@ -155,7 +155,7 @@ public class HttpTaskServer {
                                 writeResponse(exchange, "Некорректный id", 400);
                             }
                             try {
-                                manager.getEpicByIdWithoutHistoryAdd(id);
+                                manager.getEpicByIdWithoutHistoryAdd(id).getName();
                                 manager.removeEpicByID(id);
                                 writeResponse(exchange, "Epic удален", 200);
                             } catch (NullPointerException e) {
@@ -217,7 +217,7 @@ public class HttpTaskServer {
                             writeResponse(exchange, "Некорректный id", 400);
                         }
                         try {
-                            manager.getSubtaskByIdWithoutHistoryAdd(id);
+                            manager.getSubtaskByIdWithoutHistoryAdd(id).getName();
                             manager.removeSubtaskByID(id);
                             writeResponse(exchange, "Subtask удален", 200);
                         } catch (NullPointerException e) {
@@ -265,7 +265,7 @@ public class HttpTaskServer {
             Integer id = getIdFromQuery(exchange.getRequestURI().getQuery());
             if (method.equals(Method.GET) & id != null){
                 try {
-                    manager.getEpicByIdWithoutHistoryAdd(id);
+                    manager.getEpicByIdWithoutHistoryAdd(id).getName();
                     writeResponse(exchange, gson.toJson(manager.getSubtasksOfEpic(id)), 200);
                 } catch (NullPointerException e){
                     writeResponse(exchange, "Epic c id=" + id + " не найден", 404);

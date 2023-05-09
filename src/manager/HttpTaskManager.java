@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class HttpTaskManager extends FileBackedTasksManager{
-    String url;
-    KVTaskClient kvTaskClient;
-    Gson gson = new Gson();
+    private String url;
+    private KVTaskClient kvTaskClient;
+    private Gson gson = new Gson();
 
     public HttpTaskManager(String url) throws IOException, InterruptedException {
        this.url = url;

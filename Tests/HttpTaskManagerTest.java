@@ -1,4 +1,4 @@
-
+package Tests;
 
 
 import Http.KVServer;
@@ -19,34 +19,37 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpTaskManagerTest {
-    HttpTaskManager manager;
-    KVServer kvServer;
-    Task task1 = new Task("TestName1", "TestDescription1", Status.NEW,
-            LocalDateTime.now().plus(Duration.ofSeconds(1)), Duration.ofSeconds(1));
-    Task task2 = new Task("TestName2", "TestDescription2", Status.DONE,
-            LocalDateTime.now().plus(Duration.ofSeconds(2)), Duration.ofSeconds(1));
-    Task task3 = new Task("TestName2", "TestDescription2", Status.DONE);
-    Epic epic1 = new Epic("TestName3", "TestDescription3");
-    Epic epic2 = new Epic("TestName4", "TestDescription4");
-    Subtask subtask1 = new Subtask("TestName5", "TestDescription5", Status.NEW, 0,
-            LocalDateTime.now().plus(Duration.ofSeconds(3)), Duration.ofSeconds(1));
-    Subtask subtask2 = new Subtask("TestName6", "TestDescription6", Status.DONE, 0,
-            LocalDateTime.now().plus(Duration.ofSeconds(4)), Duration.ofSeconds(1));
+    private HttpTaskManager manager;
+    private KVServer kvServer;
+    private Task task1, task2, task3;
+    private Epic epic1, epic2;
+    private Subtask subtask1, subtask2;
 
     @BeforeEach
-    void beforeEach() throws IOException {
+    void beforeEach() throws IOException, InterruptedException {
+        task1 = new Task("TestName1", "TestDescription1", Status.NEW,
+                LocalDateTime.now().plus(Duration.ofSeconds(1)), Duration.ofSeconds(1));
+        task2 = new Task("TestName2", "TestDescription2", Status.DONE,
+                LocalDateTime.now().plus(Duration.ofSeconds(2)), Duration.ofSeconds(1));
+        task3 = new Task("TestName2", "TestDescription2", Status.DONE);
+        epic1 = new Epic("TestName3", "TestDescription3");
+        epic2 = new Epic("TestName4", "TestDescription4");
+        subtask1 = new Subtask("TestName5", "TestDescription5", Status.NEW, 0,
+                LocalDateTime.now().plus(Duration.ofSeconds(3)), Duration.ofSeconds(1));
+        subtask2 = new Subtask("TestName6", "TestDescription6", Status.DONE, 0,
+                LocalDateTime.now().plus(Duration.ofSeconds(4)), Duration.ofSeconds(1));
         kvServer = new KVServer();
         kvServer.start();
         manager = Managers.getDefault();
     }
 
     @AfterEach
-    void afterAll(){
+    void afterEach(){
         kvServer.stop();
     }
 
     @Test
-    void getAllTasksTest() {
+    void shouldGetAllTasks() {
         manager.makeNewTask(task1);
         manager.makeNewTask(task2);
         ArrayList tasks = manager.getAllTasks();
@@ -56,7 +59,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void getAllEpicsTest() {
+    void shouldGetAllEpics() {
         manager.makeNewTask(epic1);
         manager.makeNewTask(epic2);
         ArrayList tasks = manager.getAllEpics();
@@ -66,18 +69,18 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void getAllSubtasksTest() {
+    void shouldGetAllSubtasks() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         manager.makeNewSubtask(subtask2, epic1.getID());
-        ArrayList tasks = manager.getAllSubtasks();
-        assertEquals(2, tasks.size());
-        assertEquals(subtask1.getName(), tasks.get(0));
-        assertEquals(subtask2.getName(), tasks.get(1));
+        ArrayList subtasks = manager.getAllSubtasks();
+        assertEquals(2, subtasks.size());
+        assertEquals(subtask1.getName(), subtasks.get(0));
+        assertEquals(subtask2.getName(), subtasks.get(1));
     }
 
     @Test
-    void removeAllTasksTest() {
+    void shouldRemoveAllTasks() {
         manager.makeNewTask(task1);
         manager.makeNewTask(task2);
         manager.removeAllTasks();
@@ -85,7 +88,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void removeAllEpicsTest() {
+    void shouldRemoveAllEpics() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         manager.makeNewSubtask(subtask2, epic1.getID());
@@ -95,7 +98,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void removeAllSubtasksTest() {
+    void shouldRemoveAllSubtasks() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         manager.makeNewSubtask(subtask2, epic1.getID());
@@ -104,7 +107,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void makeNewTaskTest() {
+    void shouldMakeNewTask() {
         manager.makeNewTask(task1);
         manager.makeNewTask(epic1);
         assertEquals(1, manager.getMapOfTasks().size());
@@ -114,7 +117,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void makeNewSubtaskTest() {
+    void shouldMakeNewSubtask() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         assertEquals(1, manager.getMapOfSubtasks().size());
@@ -123,26 +126,26 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void getTaskByIdTest() {
+    void shouldGetTaskById() {
         manager.makeNewTask(task1);
         assertEquals(task1, manager.getTaskByID(task1.getID()));
     }
 
     @Test
-    void getEpicByIdTest() {
+    void shouldGetEpicById() {
         manager.makeNewTask(epic1);
         assertEquals(epic1, manager.getEpicByID(epic1.getID()));
     }
 
     @Test
-    void getSubtaskByIdTest() {
+    void shouldGetSubtaskById() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         assertEquals(subtask1, manager.getSubtaskByID(subtask1.getID()));
     }
 
     @Test
-    void refreshTaskTest() {
+    void shouldRefreshTask() {
         manager.makeNewTask(task1);
         manager.refreshTask(task2, task1.getID());
         assertTrue(manager.getMapOfTasks().containsValue(task2));
@@ -150,7 +153,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void refreshSubTaskTest() {
+    void shouldRefreshSubTask() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         manager.refreshSubtask(subtask2, subtask1.getID());
@@ -161,7 +164,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void refreshEpicTest() {
+    void shouldRefreshEpic() {
         manager.makeNewTask(epic1);
         manager.refreshEpic(epic2, epic1.getID());
         assertTrue(manager.getMapOfEpics().containsValue(epic2));
@@ -169,21 +172,21 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void removeEpicByIDTest() {
+    void shouldRemoveEpicByID() {
         manager.makeNewTask(epic1);
         manager.removeEpicByID(epic1.getID());
         assertFalse(manager.getMapOfEpics().containsValue(epic1));
     }
 
     @Test
-    void removeTaskByIDTest() {
+    void shouldRemoveTaskByID() {
         manager.makeNewTask(task1);
         manager.removeTaskByID(task1.getID());
         assertFalse(manager.getMapOfTasks().containsValue(task1));
     }
 
     @Test
-    void removeSubtaskByIDTest() {
+    void shouldRemoveSubtaskByID() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         manager.removeSubtaskByID(subtask1.getID());
@@ -192,14 +195,14 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void getSubtasksOfEpicTest() {
+    void shouldGetSubtasksOfEpic() {
         manager.makeNewTask(epic1);
         manager.makeNewSubtask(subtask1, epic1.getID());
         assertEquals(subtask1.getName(), manager.getSubtasksOfEpic(epic1.getID()).get(0));
     }
 
     @Test
-    void getPrioritizedTasksTest(){
+    void shouldGetPrioritizedTasks(){
         manager.makeNewTask(task3);
         manager.makeNewTask(task1);
         manager.makeNewTask(task2);
@@ -210,7 +213,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    void saveToServerAndLoadFromServerTest(){
+    void testSaveToServerAndLoadFromServer(){
         manager.makeNewTask(task1);
         manager.makeNewTask(task2);
         manager.makeNewTask(epic1);
@@ -218,7 +221,7 @@ public class HttpTaskManagerTest {
         manager.removeAll();
         manager.loadFromServer();
         TreeSet<Task> actual = manager.getPrioritizedTasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertEquals(expected, actual);
     }
 
 }

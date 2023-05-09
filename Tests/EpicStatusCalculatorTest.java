@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicStatusCalculatorTest {
-    FileBackedTasksManager manager;
-    Epic epic1 = new Epic("", "");
-    Subtask subtask1, subtask2, subtask3, subtask4, subtask5, subtask6;
+    private FileBackedTasksManager manager;
+    private Epic epic1;
+    private Subtask subtask1, subtask2, subtask3, subtask4, subtask5, subtask6;
 
     @BeforeEach
     void beforeEach(){

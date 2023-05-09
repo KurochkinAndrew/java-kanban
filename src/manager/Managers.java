@@ -7,12 +7,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 public class Managers {
-    public static HttpTaskManager getDefault() {
-        try {
+    public static HttpTaskManager getDefault() throws IOException, InterruptedException {
             return new HttpTaskManager("http://localhost:8078/");
-        } catch (IOException | InterruptedException e){
-            return null;
-        }
     }
 
 

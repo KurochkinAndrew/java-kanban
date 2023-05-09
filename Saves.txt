@@ -1,4 +1,5 @@
 id,type,name,status,description, startTime, duration, epic
-0,TASK,Погулять с собакой,NEW,Вечерняя прогулка,01.01.2023|00:21,PT2M30S,
+0,EPIC,,IN_PROGRESS,,09.05.2023|15:29,PT2S,
+1,SUBTASK,,DONE,,09.05.2023|15:29,PT1S,0
+2,SUBTASK,,NEW,,09.05.2023|15:29,PT1S,0
 
-0

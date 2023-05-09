@@ -15,17 +15,17 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskManagerTest {
-    FileBackedTasksManager manager;
-    Task task1 = new Task("TestName1", "TestDescription1", Status.NEW,
+    private FileBackedTasksManager manager;
+    private Task task1 = new Task("TestName1", "TestDescription1", Status.NEW,
             LocalDateTime.now().plus(Duration.ofSeconds(1)), Duration.ofSeconds(1));
-    Task task2 = new Task("TestName2", "TestDescription2", Status.DONE,
+    private Task task2 = new Task("TestName2", "TestDescription2", Status.DONE,
             LocalDateTime.now().plus(Duration.ofSeconds(2)), Duration.ofSeconds(1));
-    Task task3 = new Task("TestName2", "TestDescription2", Status.DONE);
-    Epic epic1 = new Epic("TestName3", "TestDescription3");
-    Epic epic2 = new Epic("TestName4", "TestDescription4");
-    Subtask subtask1 = new Subtask("TestName5", "TestDescription5", Status.NEW, 0,
+    private Task task3 = new Task("TestName2", "TestDescription2", Status.DONE);
+    private Epic epic1 = new Epic("TestName3", "TestDescription3");
+    private Epic epic2 = new Epic("TestName4", "TestDescription4");
+    private Subtask subtask1 = new Subtask("TestName5", "TestDescription5", Status.NEW, 0,
             LocalDateTime.now().plus(Duration.ofSeconds(3)), Duration.ofSeconds(1));
-    Subtask subtask2 = new Subtask("TestName6", "TestDescription6", Status.DONE, 0,
+    private Subtask subtask2 = new Subtask("TestName6", "TestDescription6", Status.DONE, 0,
             LocalDateTime.now().plus(Duration.ofSeconds(4)), Duration.ofSeconds(1));
 
     @BeforeEach
